@@ -1,0 +1,45 @@
+To do:
+
+
+
+
+done 2.1:
+0,0 dos campos desaparecer com o clique do utilizador - Melhorado com um javascript onfocus
+Corrigir erro de refresh na primeira página da nova_insp
+Novo default a cada fracção
+javascript antigo para tratar o out foi retirado
+Ajustar o nome da fração no modal
+Mesma linha em modo retrato (não sei se vou fazer)
+
+done:
+Colocar as divisões na mesma linha
+Nome secção para fracção 
+O número do processo deverá ser do tipo 000/2023	 
+Na introdução dos dados só deve aceitar valores com virgulas. (Péssima ideia) 
+Na designação da Divisão deve aceitar mais texto Exº Sala [ZAP 1], Sala de Jantar
+Criar uma caixa Out na primeira linha de cada fração
+Criar uma caixa IN na primeira linha de cada inspeção
+Na exportação para Exel o ficheiro deverá criar uma tabela cujo resultado deverá ser de acordo com o ficheiro anexo
+Editar nome da Secção
+
+
+
+## Ficheiro mudados
+Inspecao:
+.views
+.models
+.form
+.urls
+
+templates:
+nova_insp.html
+input_in.html
+select_id.html
+base.html
+
+Pages:
+
+templates:
+select_edit.html
+id_input.html
+

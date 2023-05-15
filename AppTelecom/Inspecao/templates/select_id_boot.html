@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+<head>
+<!--    <meta charset="utf-8">-->
+    {% block title %}
+        <title>Seleciona ID</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content%}
+    <div class="container-xl my-5 mx-auto">
+        <div class="d-flex justify-content-center">
+            <form method="post" action="{% url 'download' %}">
+                  {% csrf_token %}
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Selecione o ID do relatório
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for id in relatorios_id %}
+                            <li><a class="dropdown-item" href="#"
+                                   onclick="updateDropdownText('{{id}}');
+                                   document.getElementById('selected_id').value='{{id}}'">
+
+                                {{id}}
+                            </a></li>
+        <!--                    <option value="{{ id }}">{{ id }}</option>-->
+                        {% endfor %}
+
+                    </ul>
+                </div>
+<!--            <div class="container-lg my-auto mx-auto">-->
+                <input type="hidden" id="selected_id" name="selected_id">
+                  <div class="d-flex justify-content-right">
+                    <a href="/insp/cancel" class="btn btn-outline-danger" type="button">
+                        Voltar
+                    </a>
+                    <input class="btn btn-outline-success" type="submit" value="Descarregar ficheiro">
+                  </div>
+
+                </form>
+            </div>
+        </div>
+    {% endblock %}
+
+<script>
+
+  $(document).ready(function () {
+    $(".dropdown-menu li a").click(function(){
+    var selectedText = $(this).text();
+
+      $("button:first-child").text($(this).text());
+      $("button:first-child").val($(this).text());
+      $("#selected_id").val($(this).data('id'));
+      updateDropdownText(selectedText);
+    });
+  });
+
+    function updateDropdownText(text) {
+  document.querySelector(".dropdown-toggle").textContent = text;
+
+}
+</script>
+</body>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39-->
+<!--    <title>App Telecom</title>-->
+
+    <style>
+
+          .logo-img {
+              width: 10%;
+              height: auto;
+              filter: invert(100%);
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
+          .narrow-select { width: 80px; }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+		function ExcluirSeccao(){
+		  var userPreference;
+
+			if (confirm("Título de Exemplo\nEstás certo que quer excluir essa fracção?") == true) {
+				userPreference = "Fracção excluída!";
+			} else {
+				userPreference = "";
+			}
+
+			document.getElementById("msg").innerHTML = userPreference;
+		}
+
+    </script>
+    <script>
+        // Trata do texto do modal para buscar o nome atual da fracção
+        $(document).ready(function() {
+          $('#ModalConfirmaSec').on('show.bs.modal', function(event) {
+            var fraccaoInput = $('#fraccao');
+            var fraccaoValue = fraccaoInput.val();
+            $('#texto-modal').text('Tens certeza que queres excluir a fracção "' + fraccaoValue + '"? Essa escolha será permanente.');
+          });
+
+          $('#btn-open-modal').on('click', function(event) {
+            $('#ModalConfirmaSec').modal('show');
+          });
+        });
+    </script>
+
+</head>
+<body class="p-3 mb-2 bg-dark text-white">
+<!--    <div class="header"></div>-->
+ <img class="logo-img flex" src="{% static 'space_monkey-removebg.png' %}" alt="Logo"
+      width="35" height="35">
+<!--<body class="body">-->
+  {% block content%}
+
+  {% endblock %}
+</body>
+
+</html>
+
