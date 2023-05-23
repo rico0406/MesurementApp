@@ -4,37 +4,41 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Div, Fieldset
 
 
+FOCUS_COLOR = "this.style.boxShadow = '0 0 5px #ea32b3'; "
+ONFOCUS_SCRIPT = f"{FOCUS_COLOR}if (this.value==0){{ this.value = ''; }}"
 class Form_Divisao(forms.ModelForm):
 
     class Meta:
         model = Divisao
-        fields = ('nome', 'freq47', 'freq862', 'freq950', 'freq2150')
-        labels = {'nome': 'Nome ',
-                  'freq47': "47 MHz ",
-                  'freq862': '862 MHz ',
-                  'freq950': '950 MHz ',
-                  'freq2150': '2150 MHz '}
+        fields = ('nome', 'mesurement_point1', 'mesurement_point2', 'mesurement_point3', 'mesurement_point4')
+        labels = {'nome': 'Name ',
+                  'mesurement_point1': "Point 1 ",
+                  'mesurement_point2': 'Point 2 ',
+                  'mesurement_point3': 'Point 3 ',
+                  'mesurement_point4': 'Point 4 '}
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-control'}),
-            'freq47': forms.NumberInput(attrs={'class': 'narrow-select ',
-                                               'onfocus': "if (this.value==0){ this.value = ''; }"}),
-            'freq862': forms.NumberInput(
+            'nome': forms.TextInput(attrs={'class': 'form-control',
+                                           'onfocus': FOCUS_COLOR}),
+            'mesurement_point1': forms.NumberInput(attrs={'class': 'narrow-select ',
+                                                          'onfocus': ONFOCUS_SCRIPT,
+                                                          'onblur': "this.style.boxShadow = 'none';"}),
+            'mesurement_point2': forms.NumberInput(
                 attrs={'class': 'narrow-select ',
-                       'onfocus': "if (this.value==0){ this.value = ''; }"}),
-            'freq950': forms.NumberInput(
+                       'onfocus': ONFOCUS_SCRIPT}),
+            'mesurement_point3': forms.NumberInput(
                 attrs={'class': 'narrow-select ',
-                       'onfocus': "if (this.value==0){ this.value = ''; }"}),
-            'freq2150': forms.NumberInput(
+                       'onfocus': ONFOCUS_SCRIPT}),
+            'mesurement_point4': forms.NumberInput(
                 attrs={'class': 'narrow-select ',
-                       'onfocus': "if (this.value==0){ this.value = ''; }"})
+                       'onfocus': ONFOCUS_SCRIPT})
         }
 
         # help_texts = {
-        #     'nome': 'Nome dado à divisão a ser inspecionada',
+        #     'nome': 'Name dado à divisão a ser inspecionada',
         # }
         error_messages = {
             'nome': {
-                'max_length': 'Nome da divisão tem mais caracteres que o permitido',
+                'max_length': 'Division name exceeded the character limit',
             },
         }
 
@@ -61,7 +65,7 @@ class Form_Divisao(forms.ModelForm):
 
                         Div(
                             Field(
-                                'freq47',
+                                'mesurement_point1',
                                 css_class="form-control narrow-select ms-2"
                             ),
                             css_class="col"
@@ -69,7 +73,7 @@ class Form_Divisao(forms.ModelForm):
 
                         Div(
                             Field(
-                                'freq862',
+                                'mesurement_point2',
                                 css_class="form-control narrow-select mx-1"
                             ),
                             css_class="col"
@@ -77,14 +81,14 @@ class Form_Divisao(forms.ModelForm):
 
                         Div(
                             Field(
-                                'freq950',
+                                'mesurement_point3',
                                 css_class="form-control narrow-select ms-2"
                             ),
                             css_class="col"
                         ),
                         Div(
                             Field(
-                                'freq2150',
+                                'mesurement_point4',
                                 css_class="form-control narrow-select mx-1"
                             ),
                             css_class="col"
@@ -97,7 +101,7 @@ class Form_Divisao(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        for field_name in ['freq47', 'freq862', 'freq950', 'freq2150']:
+        for field_name in ['mesurement_point1', 'mesurement_point2', 'mesurement_point3', 'mesurement_point4']:
             if cleaned_data.get(field_name) == None:
                 cleaned_data[field_name] = 0.0
         return cleaned_data

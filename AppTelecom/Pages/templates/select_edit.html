@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     {% block title %}
-        <title>Seleciona ID</title>
+        <title>Select ID</title>
     {% endblock %}
 </head>
 <body>
@@ -13,21 +13,21 @@
             <form method="post" action="{% url 'load' %}">
               {% csrf_token %}
               <p>
-                Selecione o ID do relatório:
+                Select the report ID:
                 <select id="listbox-id" name="selected_id" class="dropdown">
                     {% for id in relatorios_id %}
                         {% with sliced_id=id|slice:"4" %}
-                            <option value="{{ id }}">{{ sliced_id }}/{{ id|slice:"-4:" }}</option>
+                            <option value="{{ id }}">{{ sliced_id }}-{{ id|slice:"-4:" }}</option>
                         {% endwith %}
                     {% endfor %}
                 </select>
               </p>
 
-              <div class="d-flex justify-content-lg-end mt-4">
+              <div class="d-flex justify-content-end mt-4">
                 <a href="/insp/cancel" class="btn btn-outline-danger btn-lg mx-2" type="button" >
-                    Voltar
+                    Back
                 </a>
-                <input class="btn btn-outline-success btn-lg" type="submit" value="Selecionar">
+                <input class="btn btn-outline-success btn-lg" type="submit" value="Select">
               </div>
 
             </form>

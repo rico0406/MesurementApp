@@ -13,7 +13,7 @@
             <ul class="messages">
                 {% for message in messages %}
                     <div class="alert alert-danger alert-dismissible fade show align-items-center" role="alert">
-                        <strong>Oh não! =(</strong> {{ message }}
+                        <strong>Oh no! =(</strong> {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
@@ -28,15 +28,15 @@
             <div class="d-flex justify-content-center">
                 <form  action="{% url 'input_in' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <label for="id_text">ID da inspeção</label>
+                    <label for="id_text">Inspection ID</label>
                     <input type="text" id="id_text" name="insp_idx" maxlength="9"
                            pattern="\d{4}-\d{4}" inputmode="numeric" class="inputbox_css"
                            onkeyup="addSlashToInput(this)" required><br><br>
-                    <div class="d-flex justify-content-lg-end mt-4">
+                    <div class="d-flex justify-content-end mt-4">
                         <a href="/insp/cancel" class="btn btn-outline-danger btn-lg mx-2" type="button">
-                            Voltar
+                            Back
                         </a>
-                        <input class="btn btn-outline-success btn-lg" type="submit"  value="Enviar">
+                        <input class="btn btn-outline-success btn-lg" type="submit"  value="Send">
                     </div>
 
                 </form>

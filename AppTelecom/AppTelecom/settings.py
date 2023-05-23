@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     # RRO
     'Pages',
     'Inspecao',
-    'Seccao',
-    'Divisao',
 
     # Terceiros
     'crispy_forms',

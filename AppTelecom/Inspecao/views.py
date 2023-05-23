@@ -12,6 +12,16 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 
+NEW_FORM = [
+                Form_Divisao(initial={'nome': 'Out'}),
+                Form_Divisao(initial={'nome': 'Division A'}),
+                Form_Divisao(initial={'nome': 'Division B'}),
+                Form_Divisao(initial={'nome': 'Division C'}),
+                Form_Divisao(initial={'nome': 'Division D'}),
+                Form_Divisao(initial={'nome': 'Division E'}),
+            ]
+
+
 def get_in(request):
     """
 
@@ -25,16 +35,17 @@ def get_in(request):
 
         check = Inspection.objects.filter(Ref_Relatorio=idinsp)
         if check:
-            messages.add_message(request, messages.INFO, 'ID já registrado, favor inserir um número diferente.')
+            messages.add_message(request, messages.INFO,
+                                 'ID already registered, please enter a different register number.')
             return render(request, 'id_input.html')
 
         # Salva o id da inspeção temporariamente na cache para poder ser recuperada e deletada quando se for começar a
         # inspeção. Foi-se feito dessa forma pois save_in usa redirect e ia dar muito trabalho modificar o programa
 
         cache.set(100, idinsp, 18000)
-        form = Form_Divisao(initial={'nome': 'IN'})
+        form = Form_Divisao(initial={'nome': 'Ref'})
         contexto = {'form': form,
-                    'nome': 'IN'}
+                    'nome': 'Reference'}
 
     return render(request, 'input_in.html', contexto)
 
@@ -47,14 +58,14 @@ def save_in(request):
 
     if request.method == 'POST':
         name = request.POST.getlist('nome')
-        freq_47 = request.POST.getlist('freq47')
-        freq_862 = request.POST.getlist('freq862')
-        freq_950 = request.POST.getlist('freq950')
-        freq_2150 = request.POST.getlist('freq2150')
+        mp1 = request.POST.getlist('mesurement_point1')
+        mp2 = request.POST.getlist('mesurement_point2')
+        mp3 = request.POST.getlist('mesurement_point3')
+        mp4 = request.POST.getlist('mesurement_point4')
 
-        data_sec = {"nome": name, '47': freq_47,
-                    '862': freq_862, '950': freq_950,
-                    '2150': freq_2150, 'name_sec': 'IN'}
+        data_sec = {"nome": name, 'mp1': mp1,
+                    'mp2': mp2, 'mp3': mp3,
+                    'mp4': mp4, 'name_sec': 'IN'}
         cache.set(0, data_sec, 18000)
 
     return redirect('new')
@@ -71,14 +82,7 @@ def nova_insp(request):
 
     idinsp = cache.get(100)
 
-    form = [
-        Form_Divisao(initial={'nome': 'Out'}),
-        Form_Divisao(initial={'nome': 'Sala (ZAP Esqª)'}),
-        Form_Divisao(initial={'nome': 'Sala (ZAP Dirª)'}),
-        Form_Divisao(initial={'nome': 'Cozinha'}),
-        Form_Divisao(initial={'nome': 'Quarto 1'}),
-        Form_Divisao(initial={'nome': 'Quarto 2'}),
-    ]
+    form = NEW_FORM
 
     no_div = len(form)
     # form = Form_Divisao()
@@ -126,24 +130,28 @@ def download_data(request):
         tabela = df_sec.merge(df_div, left_on='id', right_on='sec_id', how='left')
         tabela.drop(['id_x', 'id_y', 'sec_id', 'inspec_id'], axis=1, inplace=True)
 
-        tabela[["freq47", 'freq862', 'freq950', 'freq2150']] = tabela[["freq47", 'freq862', 'freq950', 'freq2150']].astype(float)
+        tabela[
+            ["mesurement_point1", 'mesurement_point2', 'mesurement_point3', 'mesurement_point4']
+        ] = tabela[
+            ["mesurement_point1", 'mesurement_point2', 'mesurement_point3', 'mesurement_point4']
+        ].astype(float)
 
         tabela.rename(columns={
-            'nome_x': 'Fracção',
-            'nome_y': 'Divisão',
-            "freq47": "47 Mhz",
-            'freq862': '862 Mhz',
-            'freq950': '950 Mhz',
-            'freq2150': '2150 Mhz'
+            'nome_x': 'Section',
+            'nome_y': 'Division',
+            "mesurement_point1": "Mesurement Point 1",
+            'mesurement_point2': 'Mesurement Point 2',
+            'mesurement_point3': 'Mesurement Point 3',
+            'mesurement_point4': 'Mesurement Point 4'
         }, inplace=True)
 
         # tabela.to_csv('C:/Users/rro/IEP/AppTelecom/tabela.csv', index=False, sep=';')
 
         # Substitui por vazio todos os valores repetidos na Fracção
         # Apaga o 0 na coluna Fracção para que o IN fique sem fracção
-        tabela['Fracção'] = tabela['Fracção'].replace(0, None)
+        tabela['Section'] = tabela['Section'].replace(0, None)
         # Deixa o nome de cada fração só aparecendo uma vez
-        tabela['Fracção'][tabela.duplicated('Fracção', keep='first')] = None
+        tabela['Section'][tabela.duplicated('Section', keep='first')] = None
 
         # Primeira linha da tabela será utiizada para fazer a tabela secundária
         df_in = tabela.iloc[0, 2:].copy()
@@ -152,18 +160,18 @@ def download_data(request):
         tabela_diff = tabela.copy().apply(lambda x: x-df_in, axis=1)
 
         # Retira colunas Divisão e Fracção
-        tabela_diff = tabela_diff.drop(['Divisão', 'Fracção'], axis=1)
+        tabela_diff = tabela_diff.drop(['Division', 'Section'], axis=1)
 
         # Tranforma as colunas das frequencias em float
         tabela_diff = tabela_diff.astype(float)
 
         # Ordena as colunas e coloca os nomes utilizados no ficheiro excel
-        tabela_diff = tabela_diff.reindex(columns=["47 Mhz", '862 Mhz', '950 Mhz', '2150 Mhz'])
+        tabela_diff = tabela_diff.reindex(columns=["Mesurement Point 1", 'Mesurement Point 2', 'Mesurement Point 3', 'Mesurement Point 4'])
         tabela_diff.rename(columns={
-            "47 Mhz": "AT 47 Mhz",
-            '862 Mhz': 'AT 862 Mhz',
-            '950 Mhz': 'AT 950 Mhz',
-            '2150 Mhz': 'AT 2150 Mhz'},
+            "Mesurement Point 1": "AT Mesurement Point 1",
+            'Mesurement Point 2': 'AT Mesurement Point 2',
+            'Mesurement Point 3': 'AT Mesurement Point 3',
+            'Mesurement Point 4': 'AT Mesurement Point 4'},
             inplace=True)
 
         # Tira o zero da primeira linha e substitui por vazio
@@ -251,10 +259,10 @@ def deleta_seccao(request):
     forms = []
     for i in range(divs):
         inicial['nome'] = reg['nome'][i]
-        inicial['freq47'] = reg['47'][i]
-        inicial['freq862'] = reg['862'][i]
-        inicial['freq950'] = reg['950'][i]
-        inicial['freq2150'] = reg['2150'][i]
+        inicial['mesurement_point1'] = reg['mp1'][i]
+        inicial['mesurement_point2'] = reg['mp2'][i]
+        inicial['mesurement_point3'] = reg['mp3'][i]
+        inicial['mesurement_point4'] = reg['mp4'][i]
         forms.append(Form_Divisao(initial=inicial))
 
     pags = range(1, n_sec + 1, 1)
@@ -289,27 +297,20 @@ def trata_submit(request):
     if request.method == 'POST':
         # informações do form da divisão
         ls_nome = request.POST.getlist('nome')
-        ls_47 = request.POST.getlist('freq47')
-        ls_862 = request.POST.getlist('freq862')
-        ls_950 = request.POST.getlist('freq950')
-        ls_2150 = request.POST.getlist('freq2150')
+        ls_mp1 = request.POST.getlist('mesurement_point1')
+        ls_mp2 = request.POST.getlist('mesurement_point2')
+        ls_mp3 = request.POST.getlist('mesurement_point3')
+        ls_mp4 = request.POST.getlist('mesurement_point4')
 
         # Nome da secção (fracção)
         name_sec = request.POST['fraccao']
 
         if 'add_sec' in request.POST:
 
-            save_sec_cache(ls_nome, ls_47, ls_862, ls_950, ls_2150, id_sec, name_sec)
+            save_sec_cache(ls_nome, ls_mp1, ls_mp2, ls_mp3, ls_mp4, id_sec, name_sec)
 
             # form = [Form_Divisao(initial={'nome': 'Out'})]
-            form = [
-                Form_Divisao(initial={'nome': 'Out'}),
-                Form_Divisao(initial={'nome': 'Sala (ZAP Esqª)'}),
-                Form_Divisao(initial={'nome': 'Sala (ZAP Dirª)'}),
-                Form_Divisao(initial={'nome': 'Cozinha'}),
-                Form_Divisao(initial={'nome': 'Quarto 1'}),
-                Form_Divisao(initial={'nome': 'Quarto 2'}),
-            ]
+            form = NEW_FORM
 
             pags = range(1, n_sec + 2, 1)
             new_sec_id = n_sec + 1
@@ -326,10 +327,10 @@ def trata_submit(request):
             inicial = {}
             for i in range(no_div):
                 inicial['nome'] = ls_nome[i]
-                inicial['freq47'] = ls_47[i]
-                inicial['freq862'] = ls_862[i]
-                inicial['freq950'] = ls_950[i]
-                inicial['freq2150'] = ls_2150[i]
+                inicial['mesurement_point1'] = ls_mp1[i]
+                inicial['mesurement_point2'] = ls_mp2[i]
+                inicial['mesurement_point3'] = ls_mp3[i]
+                inicial['mesurement_point4'] = ls_mp4[i]
                 forms.append(Form_Divisao(initial=inicial))
 
             forms.append(Form_Divisao())
@@ -349,10 +350,10 @@ def trata_submit(request):
             for i in range(no_div):
                 if i != deletada:
                     inicial['nome'] = ls_nome[i]
-                    inicial['freq47'] = ls_47[i]
-                    inicial['freq862'] = ls_862[i]
-                    inicial['freq950'] = ls_950[i]
-                    inicial['freq2150'] = ls_2150[i]
+                    inicial['mesurement_point1'] = ls_mp1[i]
+                    inicial['mesurement_point2'] = ls_mp2[i]
+                    inicial['mesurement_point3'] = ls_mp3[i]
+                    inicial['mesurement_point4'] = ls_mp4[i]
                     forms.append(Form_Divisao(initial=inicial))
 
             no_div -= 1
@@ -363,7 +364,7 @@ def trata_submit(request):
             return render(request, 'nova_insp.html', contexto)
 
         elif 'send' in request.POST:
-            save_sec_cache(ls_nome, ls_47, ls_862, ls_950, ls_2150, id_sec, name_sec)
+            save_sec_cache(ls_nome, ls_mp1, ls_mp2, ls_mp3, ls_mp4, id_sec, name_sec)
 
             inspecao, _ = Inspection.objects.get_or_create(Ref_Relatorio=id_insp)
 
@@ -390,16 +391,16 @@ def trata_submit(request):
                     Divisao.objects.create(
                         nome=reg['nome'][j],
                         sec=seccao,
-                        freq47=reg['47'][j],
-                        freq862=reg['862'][j],
-                        freq950=reg['950'][j],
-                        freq2150=reg['2150'][j]
+                        mesurement_point1=reg['mp1'][j],
+                        mesurement_point2=reg['mp2'][j],
+                        mesurement_point3=reg['mp3'][j],
+                        mesurement_point4=reg['mp4'][j]
                     )
 
             return redirect('home')
 
         elif 'pag' in request.POST:
-            save_sec_cache(ls_nome, ls_47, ls_862, ls_950, ls_2150, id_sec, name_sec)
+            save_sec_cache(ls_nome, ls_mp1, ls_mp2, ls_mp3, ls_mp4, id_sec, name_sec)
             next_id = request.POST['pag']
             reg = cache.get(next_id)
 
@@ -411,10 +412,10 @@ def trata_submit(request):
             forms = []
             for i in range(divs):
                 inicial['nome'] = reg['nome'][i]
-                inicial['freq47'] = reg['47'][i]
-                inicial['freq862'] = reg['862'][i]
-                inicial['freq950'] = reg['950'][i]
-                inicial['freq2150'] = reg['2150'][i]
+                inicial['mesurement_point1'] = reg['mp1'][i]
+                inicial['mesurement_point2'] = reg['mp2'][i]
+                inicial['mesurement_point3'] = reg['mp3'][i]
+                inicial['mesurement_point4'] = reg['mp4'][i]
                 forms.append(Form_Divisao(initial=inicial))
 
             pags = range(1, n_sec + 1, 1)
@@ -460,9 +461,9 @@ def load_insp(request):
             div = Divisao.objects.filter(sec_id=sec_id)
             df_div = pd.DataFrame.from_records(div.values())
 
-            save_sec_cache(df_div['nome'].tolist(), df_div['freq47'].tolist(),
-                           df_div['freq862'].tolist(), df_div['freq950'].tolist(),
-                           df_div['freq2150'].tolist(), cache_sec_id, name_sec)
+            save_sec_cache(df_div['nome'].tolist(), df_div['mesurement_point1'].tolist(),
+                           df_div['mesurement_point2'].tolist(), df_div['mesurement_point3'].tolist(),
+                           df_div['mesurement_point4'].tolist(), cache_sec_id, name_sec)
 
             if cont_sec == 1:
                 no_div = len(div)
@@ -470,10 +471,10 @@ def load_insp(request):
                 forms = []
                 for i in range(len(div)):
                     inicial['nome'] = getattr(div[i], 'nome')
-                    inicial['freq47'] = getattr(div[i], 'freq47')
-                    inicial['freq862'] = getattr(div[i], 'freq862')
-                    inicial['freq950'] = getattr(div[i], 'freq950')
-                    inicial['freq2150'] = getattr(div[i], 'freq2150')
+                    inicial['mesurement_point1'] = getattr(div[i], 'mesurement_point1')
+                    inicial['mesurement_point2'] = getattr(div[i], 'mesurement_point2')
+                    inicial['mesurement_point3'] = getattr(div[i], 'mesurement_point3')
+                    inicial['mesurement_point4'] = getattr(div[i], 'mesurement_point4')
                     forms.append(Form_Divisao(initial=inicial))
                     nome_sec_inicial = name_sec
             cont_sec += 1
@@ -495,15 +496,15 @@ def load_insp(request):
     return render(request, 'nova_insp.html')
 
 
-def save_sec_cache(ls_nome, ls_47, ls_862, ls_950, ls_2150, id_sec, name_sec=None):
+def save_sec_cache(ls_nome, ls_mp1, ls_mp2, ls_mp3, ls_mp4, id_sec, name_sec=None):
     """
     Salva os dados de uma secção (fracção) na memoria cache.
 
     :param ls_nome: Lista de nomes de divisão
-    :param ls_47: Lista das medidas de 47 MHz da secção por divisão
-    :param ls_862: Lista das medidas de 862 MHz da secção por divisão
-    :param ls_950: Lista das medidas de 950 MHz da secção por divisão
-    :param ls_2150: Lista das medidas de 2150 MHz da secção por divisão
+    :param ls_mp1: Lista das medidas de Mesurement Point 1 da secção por divisão
+    :param ls_mp2: Lista das medidas de Mesurement Point 2 da secção por divisão
+    :param ls_mp3: Lista das medidas de Mesurement Point 3 da secção por divisão
+    :param ls_mp4: Lista das medidas de Mesurement Point 4 da secção por divisão
     :param id_sec: Index da secção a ser gravada no cache
     :param name_sec: Nome da secção a ser gravada no cache
     """
@@ -514,10 +515,10 @@ def save_sec_cache(ls_nome, ls_47, ls_862, ls_950, ls_2150, id_sec, name_sec=Non
     # Para gravar na cache tem que ser um dicionário.
     # Como pode-se ter mais de um valor associado com cada divisão, os atributos da Divisão são passados por listas
     data_sec = {"nome": ls_nome,
-                '47': ls_47,
-                '862': ls_862,
-                '950': ls_950,
-                '2150': ls_2150,
+                'mp1': ls_mp1,
+                'mp2': ls_mp2,
+                'mp3': ls_mp3,
+                'mp4': ls_mp4,
                 'name_sec': name_sec}
 
     cache.set(id_sec, data_sec, 18000)

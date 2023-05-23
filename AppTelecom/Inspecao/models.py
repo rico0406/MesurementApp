@@ -20,11 +20,11 @@ class Seccao(models.Model):
     inspec = models.ForeignKey(Inspection, on_delete=models.CASCADE)
 
 class Divisao(models.Model):
-    nome = models.CharField(max_length=100, default='Divisão')
+    nome = models.CharField(max_length=100, default='New Division')
     sec = models.ForeignKey(Seccao, on_delete=models.CASCADE)
-    freq47 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
-    freq862 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
-    freq950 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
-    freq2150 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
+    mesurement_point1 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
+    mesurement_point2 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
+    mesurement_point3 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
+    mesurement_point4 = models.DecimalField(decimal_places=1, max_digits=8, default=0.0, blank=False)
 
 
