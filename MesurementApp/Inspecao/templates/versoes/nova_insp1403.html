@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+<body>
+    {% block content %}
+    {% load crispy_forms_tags %}
+    <div class="container mt-4">
+        <p class="text-xl"><strong>
+            Inspeção {{ inspecao_id|stringformat:"04d"|slice:":4" }}/{{ inspecao_id|stringformat:"04d"|slice:"-4:" }}
+        </strong> </p>
+        <p class="text-lg"> Fracção {{ sec_id }}</p>
+        <form action="{% url 'trata_input' %}?divs={{ no_div }}&insp={{ inspecao_id }}&nsec={{ n_sec }}&sec_id={{ sec_id }}"
+              method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group mt-6 mb-10 d-flex justify-content-between">
+                <button class="btn btn-outline-light btn-lg" formmethod="post" type="submit" name='add_div' value='value'>
+                    Adiciona divisão
+                </button>
+            </div>
+            <br>
+            <div class="form-group my-n10">
+                {% for entrada in forms %}
+                <div class="form-group d-flex justify-content-center">
+                    <div class="form-group mr-3">
+<!--                        {{ entrada }}-->
+                        {% crispy entrada %}
+                    </div>
+                    {% if no_div > 1 %}
+                    <div class="form-group py-5">
+                        <button class="btn btn-danger" formmethod="post" type="submit" name='del_div' value="{{ forloop.counter0 }}">
+                            <i class="bi bi-dash-circle-fill"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="form-group">
+                {% for i in seccoes %}
+                <a href="#" onclick="event.preventDefault(); document.getElementById('seg-pag').value = '{{ i }}';
+                this.closest('form').submit();" type="button" class="btn btn-outline-primary me-2">
+                    {{ i }}
+                </a>
+                {% endfor %}
+
+                {% if n_sec > 1 %}
+
+                    <button class="btn btn-outline-danger"
+                            type="button" data-bs-toggle="modal" data-bs-target="#ModalConfirmaSec">
+                        <i class="bi bi-x bi-lg"></i>
+                    </button>
+
+                {% endif %}
+
+            </div>
+                    <input type="hidden" id="seg-pag" name="pag">
+        <div class="d-flex justify-content-center mt-2">
+            <a href="/insp/cancel?insp={{ inspecao_id }}&nsec={{ n_sec }}"
+               class="btn btn-outline-danger btn " type="button">
+                Cancelar
+            </a>
+            <button class="btn btn-outline-info btn" formmethod="post" type="submit" name='add_sec' value="add_sec">
+                Adicionar Fracção</button>
+            <input class="btn btn-outline-success btn" type="submit" name='send' value='Guardar'>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" data-bs-theme="dark" id="ModalConfirmaSec" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir fracção</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Tens certeza que queres excluir a fracção {{sec_id}}! Essa escolha será permanente.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a type="button"
+                href="{% url 'deleta_sec' %}?insp={{ inspecao_id }}&nsec={{ n_sec }}&sec_id={{ sec_id }}"
+                class="btn btn-primary">Confirmar!</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="modal fade" data-bs-theme="dark" id="ModalOut" tabindex="-1" aria-labelledby="OutModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog modal-dialog-centered">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h1 class="modal-title fs-5" id="OutModalLabel">Medidas em Out</h1>-->
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <form id="my-form"-->
+<!--              action="{% url 'trata_input' %}?divs={{ no_div }}&insp={{ inspecao_id }}&nsec={{ n_sec }}&sec_id={{ sec_id }}"-->
+<!--              method="POST" enctype="multipart/form-data">-->
+
+
+<!--      </div>-->
+<!--      <div class="modal-footer">-->
+<!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>-->
+<!--        <a type="button"-->
+<!--                href="{% url 'deleta_sec' %}?insp={{ inspecao_id }}&nsec={{ n_sec }}&sec_id={{ sec_id }}"-->
+<!--                class="btn btn-primary">Enviar</a>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<p id="msg"></p>
+    {% endblock %}
+</body>

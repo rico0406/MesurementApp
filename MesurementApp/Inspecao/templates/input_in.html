@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<br><br>
+  <div class="container-xl align-self-center" style="width: 150%">
+      <h2 class="text-center">Enter the <strong>{{ nome }}</strong> measurements values</h2>
+      <div class="d-flex justify-content-center">
+
+              <form action="{% url 'save_in' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                  <div class="form-group d-flex justify-content-center">
+                    <div class="form-group mr-3">
+                        {% crispy form %}
+                    </div>
+                  </div>
+                    <div class="me-2 d-flex justify-content-end mt-4" >
+                        <a href="/insp/cancel?insp={{ inspecao_id }}&nsec={{ n_sec }}"
+                           class="btn btn-outline-danger btn-lg " type="button">
+                            Cancel
+                        </a>
+                        <input class="ms-2 btn btn-outline-success btn-lg" type="submit" name='send' value='Save'>
+                    </div>
+
+              </form>
+
+      </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{%extends 'base.html' %}
+
+<head>
+<!--    <meta charset="utf-8">-->
+    {% block title %}
+        <title>Select ID</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content%}
+    <div class="container-xl my-5 mx-auto">
+        <div class="d-flex justify-content-center">
+<!--            <div class="container-lg my-auto mx-auto">-->
+                <form method="post" action="{% url 'download' %}">
+                  {% csrf_token %}
+                  <p>
+                    Select the report ID:
+                    <select id="listbox-id" name="selected_id" class="dropdown">
+                        {% for id in relatorios_id %}
+                            {% with sliced_id=id|slice:"4" %}
+                                <option value="{{ id }}">{{ sliced_id }}-{{ id|slice:"-4:" }}</option>
+                            {% endwith %}
+                        {% endfor %}
+                    </select>
+                  </p>
+
+                  <div class="d-flex justify-content-end">
+                    <a href="/insp/cancel" class="me-2 btn btn-outline-danger" type="button">
+                        Back
+                    </a>
+                    <input class="ms-2 btn btn-outline-success " type="submit" value="Download file">
+                  </div>
+
+                </form>
+            </div>
+        </div>
+    <p id="msg"></p>
+    {% endblock %}
+</body>

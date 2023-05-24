@@ -1,0 +1,80 @@
+{%extends 'base.html' %}
+
+<body>
+    {% block content%}
+    <div class="container mt-4">
+        <p class="text-xl"><strong> Inspeção {{inspecao_id}} </strong> </p>
+        <p class="text-lg"> Secção {{sec_id}}</p>
+        <form action="{% url 'trata_input' %}?divs={{no_div}}&insp={{inspecao_id}}&nsec={{n_sec}}&sec_id={{sec_id}}"
+              method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group mt-6 mb-10">
+                <button class="btn btn-outline-light btn-lg" formmethod="post" type="submit" name='add_div' value='value'>
+                     Adiciona divisão
+                </button>
+            </div>
+            <br>
+            <div class="form-group my-n10">
+                    <div class="accordion accordion-flush bg-dark" id="Acordeon">
+                        {% for entrada in forms %}
+
+                         <div class="accordion-item">
+                             <h2 class="accordion-header" id="Painel{{ forloop.counter }}">
+                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                         data-bs-target="#Painel_Cola{{ forloop.counter }}" aria-expanded="True"
+                                         aria-controls="Painel_Cola{{ forloop.counter }}">
+                                     Divisão {{ forloop.counter }}
+                                 </button>
+                             </h2>
+                             <div id="Painel_Cola{{ forloop.counter }}" class="accordion-collapse collapse show"
+                                  aria-labelledby="Painel{{ forloop.counter }}">
+<!--                                  data-bs-parent="#Acordeon">-->
+                                <div class="accordion-body">
+                                    <div class="row">
+                                    <div class="col">
+
+                                        {{ entrada }}
+                                        {% if no_div > 1 %}
+                                          <button class="btn btn-danger" formmethod="post" type="submit"
+                                                name='del_div' value="{{ forloop.counter0 }}">
+                                            <i class="bi bi-dash-circle-fill"></i>
+                                          </button>
+                                        {% endif %}
+                                        <br>
+                                    </div>
+                                    </div>
+                                </div>
+                             </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                {% for i in seccoes  %}
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('seg-pag').value = '{{ i }}';
+                    this.closest('form').submit();"  type="button" class="btn btn-outline-primary me-2">
+                        {{ i }}
+                    </a>
+                {% endfor %}
+
+                </div>
+
+                <input type="hidden" id="seg-pag" name="pag">
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="/insp/cancel?insp={{inspecao_id}}&nsec={{n_sec}}" >
+                        <button class="btn btn-outline-danger btn-lg" type="button">Cancelar</button>
+                    </a>
+                    <button class="btn btn-outline-info btn-lg" formmethod="post" type="submit" name='add_sec' value="add_sec">
+                        Adicionar Secção</button>
+                    <input class="btn btn-outline-success btn-lg" type="submit" name='send' value='Guardar'>
+                </div>
+
+        </form>
+    </div>
+
+    {% endblock %}
+</body>
+
