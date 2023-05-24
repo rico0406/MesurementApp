@@ -1,37 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1c0193f-8c9c-41d2-ae69-c929e81fedf6" name="Changes" comment="Logo Image">
+    <list default="true" id="d1c0193f-8c9c-41d2-ae69-c929e81fedf6" name="Changes" comment="New Layout">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/AppTelecom/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/AppTelecom/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/static/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Divisao/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/input_in.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/input_in.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/nova_insp.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/nova_insp.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/select_id.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/templates/select_id.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Inspecao/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Inspecao/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Pages/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Pages/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Pages/templates/id_input.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Pages/templates/id_input.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Pages/templates/select_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/Pages/templates/select_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/Seccao/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTelecom/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/AppTelecom/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684574827935</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="New Layout">
+      <created>1684823962358</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1684823962358</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -229,7 +207,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Version 1.0 Layout change" />
     <MESSAGE value="Logo Image" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logo Image" />
+    <MESSAGE value="New Layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Layout" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
